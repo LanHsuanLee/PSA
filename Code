@@ -1,0 +1,44 @@
+% Ver 1.7
+% Purpose: Adding color area to code
+% Conclusion: Too much particles when using fcn bwlabel; more precise way is necessary.
+
+clear;clc;
+
+[img0 sx units]=ReadDMFile('test.dm3');
+img=imadjust(mat2gray(img0));
+
+img1=medfilt2(img); % apply noise filter to image
+
+idx1=1000; % Disc radius of fcn strel
+background=imopen(img1,strel('disk',idx1));
+img2=img1-background; % img1: background-removed image
+img3=imadjust(img2);  % image enhancement
+img4=1-img3;  % convert white and black
+
+level=graythresh(img4); % compute the gray threshold of image
+bw=im2bw(img4,level);
+
+[labeled,numObjects]=bwlabel(bw,4);
+color_labeled=label2rgb(labeled,@hsv,'c','shuffle');
+
+% image results
+subplot(1,2,1)
+imshow(img4);
+subplot(1,2,2)
+imshow(color_labeled);
+
+
+%{
+psa_data including area, centroid and boundingbox.
+You can get parameter for each particle by:
+psa_data(1).area
+psa_data(1).centroid
+psa_data(1).BoundingBox
+%}
+%psa_data=regionprops(labeled,'Area','Centroid','BoundingBox',...
+    %'MajorAxisLength','MinorAxisLength');
+
+%psa_celldata=struct2cell(psa_data);
+%psa_area=cell2mat(psa_celldata(1,:));
+%subplot(2,2,2)
+%hist(psa_area,10)
