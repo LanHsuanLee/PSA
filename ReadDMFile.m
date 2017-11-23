@@ -6,6 +6,11 @@ function [m, sx, units]=ReadDMFile(filename,logfile)
 % description of the entire tree will be written to the console and also to
 % the file.
 
+%%
+% This file has been modified by Renfong.
+% Return the transpose image of the origin output.
+%% 
+
 % F. Sigworth, August 2013
 % Based on ReadDM3 F. Sigworth, July 2009
 % Code was based on the description by Greg Jefferis at
